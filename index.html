@@ -9,24 +9,59 @@
 </head>
 <body>
     <h1>My Bookmarks</h1>
-    <form>
+    <div class="main">
+    <form class="bookmark-form">
         <input type="text" id="add" />
         <input type="submit" value="Add Bookmark" id="button-add-bookmark"/>
 
         <br><br>
-        
-        <select name="Rating" >
-            <option value="star">1</option>
-            <option value="star">2</option>
-            <option value="star">3</option>
-            <option value="star">4</option>
-            <option value="star">5</option>
-        </select>
-        <input type="submit" value="Rating"/>         
-    </form>
-    <ul class='results'></ul>
 
+        <select name="Rating" >
+            <option value="star">
+                <span>&#x2605</span>
+            </option>
+            <option value="star">
+                <span>&#x2605</span><span>&#x2605</span>
+            </option>
+            <option value="star">
+                    <span>&#x2605</span><span>&#x2605</span><span>&#x2605</span>
+            </option>
+            <option value="star">
+                    <span>&#x2605</span><span>&#x2605</span><span>&#x2605</span><span>&#x2605</span>
+            </option>
+            <option value="star">
+                    <span>&#x2605</span><span>&#x2605</span><span>&#x2605</span><span>&#x2605</span><span>&#x2605</span>
+            </option>
+        </select>
+
+        <input type="submit" value="Rating"/>   
+              
+    </form>
+
+    <ul class='results'>
+        <li class="bookmark-item">
+            <header>
+                <span class="header-text">Bear Stories</span>
+            </header>
+            <article>
+                <p class="desciption">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc mollis bibendum nisl pretium dapibus. Morbi quis ornare felis, a cursus ligula.
+                </p>
+            </article>
+            <div class="rating">
+                <!-- <span>&#x2605</span><span>&#x2605</span><span>&#x2605</span> -->
+                <span><p>5</p></span>
+            </div>
+            <div class="visit-site">
+                <a href="url">Read It!</a>
+            </div>
+        </li>
+    </ul>
+</div>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/cuid/1.3.8/browser-cuid.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script src="scripts/index.js"></script>
+    <script src="store.js"></script>
+    <script src="bookmarks.js"></script>
+    <script src="index.js"></script>
 </body>
 </html>
