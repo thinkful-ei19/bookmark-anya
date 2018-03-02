@@ -103,6 +103,10 @@ const bookmarkList = (function() {
   };
         
 
+  const getIdFromElement = function(item) {
+      return $(item).parents('li').data('item-id');
+   };
+
   const handleNewItemSubmit = function() {
      //eventDelegation
      $('.bookmark-form').delegate('click', '#button-add-bookmark', function (event) {
@@ -113,15 +117,19 @@ const bookmarkList = (function() {
                 const newLink = $(event.currentTarget).find('#link').val();
                 const newDescription = $(event.currentTarget).find('#description').val();
                 const newRating = $(event.currentTarget).find('#rating-new-item').val();
+                const newData = {newTitle, newLink, newDescription, newRating}
 
                 $(event.currentTarget).find('#title').val('');
                 $(event.currentTarget).find('#link').val('');
                 $(event.currentTarget).find('#description').val('');
                 $(event.currentTarget).find('#rating-new-item').val('');
 
-                addItemToBookmarksList(newTitle, newLink, newDescription, newRating)
+                api.createItem(newData, (newItem) => {
+                    store.isAdding = false;
+                    store.addItemToStore(newItem);
+                    render();
+                    });
              });
-        render();
       });                
      }
     )
