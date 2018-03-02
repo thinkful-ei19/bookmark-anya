@@ -1,12 +1,6 @@
 'use strict';
-/* global store, cuid */
+// eslint-disable-next-line no-unused-vars
 const store = (function() {
-  let bookmarks = [
-    {id: cuid(), title:  'Bear', rating: 0, description: 'lorem epsum', url: '/', },
-    {id: cuid(), title:  'Fox', rating: 0, description: 'lorem epsum', url: '/', },
-    {id: cuid(), title:  'Wolf', rating: 0, description: 'lorem epsum', url: '/', },
-    {id: cuid(), title:  'Cat', rating: 0, description: 'lorem epsum', url: '/', }  
-  ];
 
   const addItem = function(item) {
     this.bookmarks.push(item);
@@ -27,18 +21,28 @@ const store = (function() {
 
   const toggleExpandedOrNot = function(id) {
     const item = this.bookmarks.find(item => item.id === id);
-    item.expanded = !item.isExpanded;
+    item.expanded = !item.expanded;
+  };
+
+  const minRatingFilter = function(rating) {
+    if (rating === 'none') {
+      this.minRating = null;
+    } else {
+      this.minRating = rating;
+    }
   };
 
   return {
-    bookmarks, //id, title, rating, expanded
+    bookmarks: [], //id, title, rating, expanded
     adding: false,
     expanded: false,
+    minRating: null,
     addItem,
     findById,
     findAndDelete,
     //toggleCheckedAdding,
-    toggleExpandedOrNot
+    toggleExpandedOrNot,
+    minRatingFilter
 
   };
 }());

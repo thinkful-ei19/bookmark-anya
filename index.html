@@ -8,32 +8,33 @@
     <title>Bookmark</title>
 </head>
 <body>
-    <h1>My Bookmarks</h1>
-    <div class="main">
+    <div class= "container">  
+    <h1>My Bookmarks</h1>    
     <form class="add-bookmark-form">
         <input type="submit" value="Add Bookmark" id="button-add-bookmark"/> 
     </form>
     <br><br> 
-    <form>
-        <select name="Rating" >
-            <option value="star">
+
+    <form class="rating-form">
+        <select name="Rating" id="select-rating-bookmark">
+            <option value="1">
                 <span>&#x2605</span>
             </option>
-            <option value="star">
+            <option value="2">
                 <span>&#x2605</span><span>&#x2605</span>
             </option>
-            <option value="star">
+            <option value="3">
                     <span>&#x2605</span><span>&#x2605</span><span>&#x2605</span>
             </option>
-            <option value="star">
+            <option value="4">
                     <span>&#x2605</span><span>&#x2605</span><span>&#x2605</span><span>&#x2605</span>
             </option>
-            <option value="star">
+            <option value="5">
                     <span>&#x2605</span><span>&#x2605</span><span>&#x2605</span><span>&#x2605</span><span>&#x2605</span>
             </option>
         </select>
 
-        <input type="submit" value="Rating"/> 
+        <input id="rating-bookmark" type="submit" value="Rating"/> 
     </form>
 
     <section class="bookmark-form">
@@ -63,6 +64,7 @@
         </li>
     </ul>
 </div>
+
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/cuid/1.3.8/browser-cuid.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="store.js"></script>

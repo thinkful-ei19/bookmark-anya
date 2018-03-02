@@ -1,5 +1,6 @@
 /* global bookmarkList, api, store, $ */
 'use strict';
+// eslint-disable-next-line no-unused-vars
 const bookmarkList = (function () {
 
   const generateNewItemForm = function () {
@@ -33,8 +34,11 @@ const bookmarkList = (function () {
                 </option>
                 </select>
             <br><br>
-            <input type="submit" value="Submit">
-            </form> 
+            <div class="item__buttons">
+            <input type="submit" id="form-submit-button" value="Submit">
+            <input type="submit" id="form-cancel-button" value="Cancel">
+            </div>
+            </form>
                     `;
     return newForm;
   };
@@ -42,7 +46,7 @@ const bookmarkList = (function () {
 
   const generateNewItems = function (bookmark) {
 
-    if (bookmark.expanded === false) {
+    if (store.expanded === false) {
       return `
         <li class="bookmark-item" data-item-id="${bookmark.id}>
             <header>
@@ -51,10 +55,10 @@ const bookmarkList = (function () {
             <div class="rating">
             ${bookmark.rating}
             </div>
-            <button class="item-toggle js-item-toggle">
+            <button class="item-toggle js-item-toggle css-item">
             <span class="button-label">Expand</span>
           </button>
-            <button class="item-delete js-item-delete">
+            <button class="item-delete js-item-delete css-item">
             <span class="button-label">Delete</span>
           </button>
         </li>
@@ -62,7 +66,7 @@ const bookmarkList = (function () {
     }
     else {
       return `
-            <li class="bookmark-item" data-item-id="${bookmark.id}>
+            <li class="bookmark-item js-item-toggle js-item-delete" data-item-id="${bookmark.id}>
             <header>
                 <span class="header-text">${bookmark.title}</span>
             </header>
@@ -75,7 +79,9 @@ const bookmarkList = (function () {
             ${bookmark.rating}
             </div>
             <div class="visit-site">
+                <p>
                 <a href="${bookmark.url}">Read It!</a>
+                </p>
             </div>
         </li>`;
     }
@@ -88,14 +94,25 @@ const bookmarkList = (function () {
 
   const render = function () {
     let items = store.bookmarks;
-    //render to the DOM
     const listString = generateBookmarksListString(items);
+
     //1. takes care of minimum rating
+    let filtered = [];
+    if (store.minRating) {
+      console.log(store.bookmarks, store.minRating);
+      filtered = store.bookmarks.filter(bookmark => bookmark.rating >= store.minRating);
+      
+      const filteredBookmarks = filtered.map(generateNewItems);
+      console.log(filteredBookmarks);
+      $('.bookmark-form').html(filteredBookmarks);
+    }
+      
+    
     //2. takes care of expanded or not
 
     //3. display new form
     // const newFormDisplay = generateNewItemForm()
-    if (store.adding === true) {
+    else if (store.adding === true) {
       //insert above html into the DOM
       let formHTML = generateNewItemForm();
       $('.bookmark-form').html(formHTML);
@@ -118,7 +135,7 @@ const bookmarkList = (function () {
     //handling a form to the page, handle 
     $('.bookmark-form').on('submit', '.new-form',function (event) {
       event.preventDefault();
-      
+
       const title =  $(event.target).find('#title').val();
       const url = $(event.target).find('#link').val();
       const desc = $(event.target).find('#description').val();
@@ -138,6 +155,14 @@ const bookmarkList = (function () {
     });
   };
 
+  const handleCancelNewItemSubmit = function() {
+    $('.bookmark-form').on('click', '#form-cancel-button', function(event){
+      event.preventDefault();
+      store.adding = false;
+      render();
+    });
+  };
+
   const handleAddBookmarkForm = function () {
     $('.add-bookmark-form').on('submit', function (event) {
       event.preventDefault();
@@ -148,41 +173,26 @@ const bookmarkList = (function () {
 
   const handleToggleDetailedBookmark = function () {
     $('.results').on('click', '.js-item-toggle', function (event) {
-      const id = getIdFromElement(event.currentTarget);
+      const id = getIdFromElement(event.target);
       store.toggleExpandedOrNot(id);
       render();
     });
   };
 
-  //   function addItemToShoppingList(itemName) {
-  //     try {
-  //       Item.validateName(itemName);
-  //       const results = Item.create(itemName);
-  //       store.items.push(results);
-  //       render();
-  //     } catch(e) {
-  //       console.log(`Cannot add item: ${e.message}`);
-  //     }
-  //   }
-
-  //   function handleNewItemSubmit() {
-  //     $('#js-shopping-list-form').submit(function (event) {
-  //       event.preventDefault();
-  //       const newItemName = $('.js-shopping-list-entry').val();
-  //       $('.js-shopping-list-entry').val('');
-  //       addItemToShoppingList(newItemName);
-  //       render();
-  //     });
-  //   }
-
-
-  //   const toggleFormPresence = function() {
-
-  //   }
+  const handleFilterByMinRating = function() {
+    $('#rating-bookmark').click(function(event) {
+      console.log(event);
+      event.preventDefault();
+      const filteredRating = $('#select-rating-bookmark').val();
+      console.log(filteredRating);
+      store.minRatingFilter(filteredRating);
+      render();
+    });
+  };
 
   const handleDeleteItem = function () {
     $('.results').on('click', '.js-item-delete', function (event) {
-      const id = getIdFromElement(event.currentTarget);
+      const id = getIdFromElement(event.target);
       api.deleteItem(id, function () {
         store.findAndDelete(id);
         render();
@@ -194,6 +204,10 @@ const bookmarkList = (function () {
   const bindEventListeners = function () {
     handleNewItemSubmit();
     handleAddBookmarkForm();
+    handleCancelNewItemSubmit();
+    handleFilterByMinRating();
+    handleDeleteItem();
+    handleToggleDetailedBookmark();
   };
 
   return {
