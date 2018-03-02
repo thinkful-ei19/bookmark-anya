@@ -48,7 +48,7 @@ const bookmarkList = (function () {
 
     if (store.expanded === false) {
       return `
-        <li class="bookmark-item js-item-toggle js-item-delete" data-item-id="${bookmark.id}>
+        <li class="bookmark-item js-item-element js-item-toggle js-item-delete" data-item-id="${bookmark.id}>
             <header>
                 <span class="header-text">${bookmark.title}</span>
             </header>
@@ -66,7 +66,7 @@ const bookmarkList = (function () {
     }
     else {
       return `
-            <li class="bookmark-item js-item-toggle js-item-delete" data-item-id="${bookmark.id}>
+            <li class="bookmark-item js-item-element js-item-toggle js-item-delete" data-item-id="${bookmark.id}>
             <header>
                 <span class="header-text">${bookmark.title}</span>
             </header>
@@ -126,7 +126,7 @@ const bookmarkList = (function () {
 
 
   const getIdFromElement = function (item) {
-    return $(item).parents('li').data('item-id');
+    return $(item).closest('.js-item-element').data('item-id');
   };
 
   const handleNewItemSubmit = function() {
@@ -173,7 +173,7 @@ const bookmarkList = (function () {
 
   const handleToggleDetailedBookmark = function () {
     $('.results').on('click', '.js-item-toggle', function (event) {
-      const id = getIdFromElement(event.target);
+      const id = getIdFromElement(event.currentTarget);
       store.toggleExpandedOrNot(id);
       render();
     });
