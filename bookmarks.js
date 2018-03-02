@@ -1,9 +1,9 @@
-/* global bookmarkList, api, store */
+/* global bookmarkList, api, store, $ */
 'use strict';
-const bookmarkList = (function() {
+const bookmarkList = (function () {
 
-  const generateNewItemForm = function() {
-    newForm = `
+  const generateNewItemForm = function () {
+    let newForm = `
             <form class="new-form">
             Title:<br>
                 <input type="text" name="title" id="title" value="title">
@@ -16,19 +16,19 @@ const bookmarkList = (function() {
             <br>
             Rating:<br>
                 <select name="Rating" id="rating-new-item" >
-                <option value="star">
+                <option value="1">
                     <span>&#x2605</span>
                 </option>
-                <option value="star">
+                <option value="2">
                     <span>&#x2605</span><span>&#x2605</span>
                 </option>
-                <option value="star">
+                <option value="3">
                         <span>&#x2605</span><span>&#x2605</span><span>&#x2605</span>
                 </option>
-                <option value="star">
+                <option value="4">
                         <span>&#x2605</span><span>&#x2605</span><span>&#x2605</span><span>&#x2605</span>
                 </option>
-                <option value="star">
+                <option value="5">
                         <span>&#x2605</span><span>&#x2605</span><span>&#x2605</span><span>&#x2605</span><span>&#x2605</span>
                 </option>
                 </select>
@@ -40,8 +40,8 @@ const bookmarkList = (function() {
   };
 
 
-  const generateNewItems = function(bookmark) {
-        
+  const generateNewItems = function (bookmark) {
+
     if (bookmark.expanded === false) {
       return `
         <li class="bookmark-item" data-item-id="${bookmark.id}>
@@ -51,8 +51,11 @@ const bookmarkList = (function() {
             <div class="rating">
             ${bookmark.rating}
             </div>
-            <button class="shopping-item-delete js-item-delete">
-            <span class="button-label">delete</span>
+            <button class="item-toggle js-item-toggle">
+            <span class="button-label">Expand</span>
+          </button>
+            <button class="item-delete js-item-delete">
+            <span class="button-label">Delete</span>
           </button>
         </li>
             `;
@@ -75,15 +78,15 @@ const bookmarkList = (function() {
                 <a href="${bookmark.url}">Read It!</a>
             </div>
         </li>`;
-    }        
+    }
   };
 
-  const generateBookmarksListString = function(list) {
+  const generateBookmarksListString = function (list) {
     const bookmarks = list.map((bookmark) => generateNewItems(bookmark));
     return bookmarks.join('');
   };
 
-  const render = function() {
+  const render = function () {
     let items = store.bookmarks;
     //render to the DOM
     const listString = generateBookmarksListString(items);
@@ -92,82 +95,105 @@ const bookmarkList = (function() {
 
     //3. display new form
     // const newFormDisplay = generateNewItemForm()
-    if (store.adding == true) {
-        //insert above html into the DOM
-        $('new-form').html(form)
-        $('.results').html(listString);
-        }
+    if (store.adding === true) {
+      //insert above html into the DOM
+      let formHTML = generateNewItemForm();
+      $('.bookmark-form').html(formHTML);
+    }
     else {
-    //insert above html into the DOM
-    $('.results').html(listString);
+      //insert above html into the DOM
+      $('.bookmark-form').empty();
+      $('.results').html(listString);
+    }
   };
-        
 
-  const getIdFromElement = function(item) {
-      return $(item).parents('li').data('item-id');
-   };
+
+  const getIdFromElement = function (item) {
+    return $(item).parents('li').data('item-id');
+  };
 
   const handleNewItemSubmit = function() {
-     //eventDelegation
-     $('.bookmark-form').delegate('click', '#button-add-bookmark', function (event) {
-        event.preventDefault();
-          $(this).find('.new-form').submit(function() {
-              $(event.currentTarget).submit(function() {
-                const newTitle =  $(event.currentTarget).find('#title').val();
-                const newLink = $(event.currentTarget).find('#link').val();
-                const newDescription = $(event.currentTarget).find('#description').val();
-                const newRating = $(event.currentTarget).find('#rating-new-item').val();
-                const newData = {newTitle, newLink, newDescription, newRating}
+    //eventDelegation
+    //hide buttons
+    //handling a form to the page, handle 
+    $('.bookmark-form').on('submit', '.new-form',function (event) {
+      event.preventDefault();
+      
+      const title =  $(event.target).find('#title').val();
+      const url = $(event.target).find('#link').val();
+      const desc = $(event.target).find('#description').val();
+      const rating = $(event.target).find('#rating-new-item').val();
+      const newData = {title, url, desc, rating};
 
-                $(event.currentTarget).find('#title').val('');
-                $(event.currentTarget).find('#link').val('');
-                $(event.currentTarget).find('#description').val('');
-                $(event.currentTarget).find('#rating-new-item').val('');
+      $(event.target).find('#title').val('');
+      $(event.target).find('#link').val('');
+      $(event.target).find('#description').val('');
+      $(event.target).find('#rating-new-item').val('');
 
-                api.createItem(newData, (newItem) => {
-                    store.isAdding = false;
-                    store.addItemToStore(newItem);
-                    render();
-                    });
-             });
-      });                
-     }
-    )
+      api.createItem(newData, (newItem) => {
+        store.adding = false;
+        store.addItem(newItem);
+        render();
+      });            
+    });
+  };
+
+  const handleAddBookmarkForm = function () {
+    $('.add-bookmark-form').on('submit', function (event) {
+      event.preventDefault();
+      store.adding = true;
+      render();
+    });
+  };
+
+  const handleToggleDetailedBookmark = function () {
+    $('.results').on('click', '.js-item-toggle', function (event) {
+      const id = getIdFromElement(event.currentTarget);
+      store.toggleExpandedOrNot(id);
+      render();
+    });
+  };
+
+  //   function addItemToShoppingList(itemName) {
+  //     try {
+  //       Item.validateName(itemName);
+  //       const results = Item.create(itemName);
+  //       store.items.push(results);
+  //       render();
+  //     } catch(e) {
+  //       console.log(`Cannot add item: ${e.message}`);
+  //     }
+  //   }
+
+  //   function handleNewItemSubmit() {
+  //     $('#js-shopping-list-form').submit(function (event) {
+  //       event.preventDefault();
+  //       const newItemName = $('.js-shopping-list-entry').val();
+  //       $('.js-shopping-list-entry').val('');
+  //       addItemToShoppingList(newItemName);
+  //       render();
+  //     });
+  //   }
+
+
+  //   const toggleFormPresence = function() {
+
+  //   }
+
+  const handleDeleteItem = function () {
+    $('.results').on('click', '.js-item-delete', function (event) {
+      const id = getIdFromElement(event.currentTarget);
+      api.deleteItem(id, function () {
+        store.findAndDelete(id);
+        render();
+      });
+    });
   };
 
 
-const addItemToBookmarksList(title, link, description, rating) {
-
-}
-//   function addItemToShoppingList(itemName) {
-//     try {
-//       Item.validateName(itemName);
-//       const results = Item.create(itemName);
-//       store.items.push(results);
-//       render();
-//     } catch(e) {
-//       console.log(`Cannot add item: ${e.message}`);
-//     }
-//   }
-  
-//   function handleNewItemSubmit() {
-//     $('#js-shopping-list-form').submit(function (event) {
-//       event.preventDefault();
-//       const newItemName = $('.js-shopping-list-entry').val();
-//       $('.js-shopping-list-entry').val('');
-//       addItemToShoppingList(newItemName);
-//       render();
-//     });
-//   }
-
- 
-  const toggleFormPresence = function() {
-
-  }
-  
-
-  const bindEventListeners = function() {
-    //handleNewItemSubmit();
+  const bindEventListeners = function () {
+    handleNewItemSubmit();
+    handleAddBookmarkForm();
   };
 
   return {

@@ -10,12 +10,11 @@
 <body>
     <h1>My Bookmarks</h1>
     <div class="main">
-    <form class="bookmark-form">
-        <input type="text" id="add" />
-        <input type="submit" value="Add Bookmark" id="button-add-bookmark"/>
-
-        <br><br>
-
+    <form class="add-bookmark-form">
+        <input type="submit" value="Add Bookmark" id="button-add-bookmark"/> 
+    </form>
+    <br><br> 
+    <form>
         <select name="Rating" >
             <option value="star">
                 <span>&#x2605</span>
@@ -34,9 +33,12 @@
             </option>
         </select>
 
-        <input type="submit" value="Rating"/>   
-              
+        <input type="submit" value="Rating"/> 
     </form>
+
+    <section class="bookmark-form">
+        
+    </section>
 
     <ul class='results'>
         <li class="bookmark-item">
@@ -65,6 +67,7 @@
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="store.js"></script>
     <script src="bookmarks.js"></script>
+    <script src="api.js"></script>
     <script src="index.js"></script>
 </body>
 </html>
