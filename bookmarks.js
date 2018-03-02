@@ -89,12 +89,12 @@ const bookmarkList = (function() {
 
     //3. display new form
     // const newFormDisplay = generateNewItemForm()
-    // if (store.adding == true) {
-    //     //insert above html into the DOM
-    //     $('new-form').html(form)
-    //     $('.results').html(listString);
-    //     }
-    // else {
+    if (store.adding == true) {
+        //insert above html into the DOM
+        $('new-form').html(form)
+        $('.results').html(listString);
+        }
+    else {
     //insert above html into the DOM
     $('.results').html(listString);
   };
@@ -110,16 +110,23 @@ const bookmarkList = (function() {
                 const newLink = $(event.currentTarget).find('#link').val();
                 const newDescription = $(event.currentTarget).find('#description').val();
                 const newRating = $(event.currentTarget).find('#rating-new-item').val();
+
+                $(event.currentTarget).find('#title').val('');
+                $(event.currentTarget).find('#link').val('');
+                $(event.currentTarget).find('#description').val('');
+                $(event.currentTarget).find('#rating-new-item').val('');
+
                 addItemToBookmarksList(newTitle, newLink, newDescription, newRating)
              });
         render();
       });                
      }
+    )
   };
 
 
 const addItemToBookmarksList(title, link, description, rating) {
-    
+
 }
 //   function addItemToShoppingList(itemName) {
 //     try {
