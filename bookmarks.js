@@ -48,7 +48,7 @@ const bookmarkList = (function () {
 
     if (store.expanded === false) {
       return `
-        <li class="bookmark-item" data-item-id="${bookmark.id}>
+        <li class="bookmark-item js-item-toggle js-item-delete" data-item-id="${bookmark.id}>
             <header>
                 <span class="header-text">${bookmark.title}</span>
             </header>
@@ -104,11 +104,11 @@ const bookmarkList = (function () {
       
       const filteredBookmarks = filtered.map(generateNewItems);
       console.log(filteredBookmarks);
-      $('.bookmark-form').html(filteredBookmarks);
+      $('.results').empty();
+      $('.results').html(filteredBookmarks);
     }
       
     
-    //2. takes care of expanded or not
 
     //3. display new form
     // const newFormDisplay = generateNewItemForm()
@@ -192,7 +192,7 @@ const bookmarkList = (function () {
 
   const handleDeleteItem = function () {
     $('.results').on('click', '.js-item-delete', function (event) {
-      const id = getIdFromElement(event.target);
+      const id = getIdFromElement(event.currentTarget);
       api.deleteItem(id, function () {
         store.findAndDelete(id);
         render();
