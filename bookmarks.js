@@ -44,19 +44,22 @@ const bookmarkList = (function() {
         
     if (bookmark.expanded === false) {
       return `
-            <li class="bookmark-item">
+        <li class="bookmark-item" data-item-id="${bookmark.id}>
             <header>
                 <span class="header-text">${bookmark.title}</span>
             </header>
             <div class="rating">
             ${bookmark.rating}
             </div>
+            <button class="shopping-item-delete js-item-delete">
+            <span class="button-label">delete</span>
+          </button>
         </li>
             `;
     }
     else {
       return `
-            <li class="bookmark-item">
+            <li class="bookmark-item" data-item-id="${bookmark.id}>
             <header>
                 <span class="header-text">${bookmark.title}</span>
             </header>
