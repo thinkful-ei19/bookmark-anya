@@ -21,7 +21,7 @@ const store = (function() {
 
   const toggleExpandedOrNot = function(id) {
     const item = this.bookmarks.find(bookmark => bookmark.id === id);
-    console.log(this.bookmarks);
+    console.log(this.bookmarks, id);
     console.log(item);
     item.expanded = !item.expanded;
   };

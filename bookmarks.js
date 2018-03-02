@@ -48,7 +48,7 @@ const bookmarkList = (function () {
 
     if (store.expanded === false) {
       return `
-        <li class="bookmark-item js-item-element js-item-toggle js-item-delete" data-item-id="${bookmark.id}>
+        <li class="bookmark-item js-item-element js-item-toggle js-item-delete" data-item-id="${bookmark.id}">
             <header>
                 <span class="header-text">${bookmark.title}</span>
             </header>
@@ -66,7 +66,7 @@ const bookmarkList = (function () {
     }
     else {
       return `
-            <li class="bookmark-item js-item-element js-item-toggle js-item-delete" data-item-id="${bookmark.id}>
+            <li class="bookmark-item js-item-element js-item-toggle js-item-delete" data-item-id="${bookmark.id}">
             <header>
                 <span class="header-text">${bookmark.title}</span>
             </header>
