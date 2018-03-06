@@ -24,8 +24,8 @@ const api = (function() {
     const settings = {
       url: `${BASE_URL}/${id}`,
       method: 'DELETE',
-      contentType: 'application/json',
-      data: '',
+      // contentType: 'application/json',
+      // data: '',
       success: callback
     };
   

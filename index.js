@@ -6,7 +6,10 @@ $(function () {
   bookmarkList.render();
 
   api.getItems((items) => {
-    items.forEach((item) => store.addItem(item));
+    items.forEach((item) => {
+      item.expanded = false; 
+      store.addItem(item);
+    });
     bookmarkList.render();
   });
 

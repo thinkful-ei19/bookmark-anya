@@ -21,9 +21,9 @@ const store = (function() {
 
   const toggleExpandedOrNot = function(id) {
     const item = this.bookmarks.find(bookmark => bookmark.id === id);
-    console.log(this.bookmarks, id);
-    console.log(item);
+    console.log(item.expanded);
     item.expanded = !item.expanded;
+    console.log(item.expanded);
   };
 
   const minRatingFilter = function(rating) {
@@ -37,7 +37,6 @@ const store = (function() {
   return {
     bookmarks: [], //id, title, rating, expanded
     adding: false,
-    expanded: false,
     minRating: null,
     addItem,
     findById,
