@@ -7,16 +7,16 @@ const bookmarkList = (function () {
     let newForm = `
             <form class="new-form">
             Title:<br>
-                <input type="text" name="title" id="title" value="title">
+                <input type="text" name="title" id="title" value="title" maxlength="20" required>
             <br>
             Link:<br>
-                <input type="text" name="link" id="link" value="link">
+                <input type="text" name="link" id="link" value="link" maxlength="20" required>
             <br>
             Description:<br>
-                <input type="text" name="description" id="description" value="description">
+                <input type="text" name="description" id="description" value="description maxlength="100"">
             <br>
             Rating:<br>
-                <select name="Rating" id="rating-new-item" >
+                <select name="Rating" id="rating-new-item" required>
                 <option value="1">
                     <span>&#x2605</span>
                 </option>
