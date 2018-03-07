@@ -46,7 +46,7 @@ const bookmarkList = (function () {
 
   const generateNewItems = function (bookmark) {
 
-    if (store.expanded === false) {
+    if (bookmark.expanded === false) {
       return `
         <li class="bookmark-item js-item-element js-item-toggle js-item-delete" data-item-id="${bookmark.id}">
             <header>
@@ -55,10 +55,10 @@ const bookmarkList = (function () {
             <div class="rating">
             ${bookmark.rating}
             </div>
-            <button class="item-toggle js-item-toggle css-item">
+            <button class="item-toggle js-button-toggle css-item">
             <span class="button-label">Expand</span>
           </button>
-            <button class="item-delete js-item-delete css-item">
+            <button class="item-delete js-button-delete css-item">
             <span class="button-label">Delete</span>
           </button>
         </li>
@@ -83,6 +83,12 @@ const bookmarkList = (function () {
                 <a href="${bookmark.url}">Read It!</a>
                 </p>
             </div>
+            <button class="item-toggle js-button-toggle css-item">
+            <span class="button-label">Shrink</span>
+          </button>
+            <button class="item-delete js-button-delete css-item">
+            <span class="button-label">Delete</span>
+          </button>
         </li>`;
     }
   };
@@ -149,6 +155,7 @@ const bookmarkList = (function () {
 
       api.createItem(newData, (newItem) => {
         store.adding = false;
+        newItem.expanded = false;
         store.addItem(newItem);
         render();
       });            
@@ -172,9 +179,10 @@ const bookmarkList = (function () {
   };
 
   const handleToggleDetailedBookmark = function () {
-    $('.results').on('click', '.js-item-toggle', function (event) {
+    $('.results').on('click', '.js-button-toggle', function (event) {
       const id = getIdFromElement(event.currentTarget);
       store.toggleExpandedOrNot(id);
+
       render();
     });
   };
@@ -191,7 +199,8 @@ const bookmarkList = (function () {
   };
 
   const handleDeleteItem = function () {
-    $('.results').on('click', '.js-item-delete', function (event) {
+    $('.results').on('click', '.js-button-delete', function (event) {
+      console.log('delete function activated');
       const id = getIdFromElement(event.currentTarget);
       api.deleteItem(id, function () {
         store.findAndDelete(id);
